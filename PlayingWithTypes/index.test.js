@@ -1,4 +1,10 @@
-const { stringToNumber, flipBoolean, whatAmI, isItTruthy } = require("./index");
+const {
+  stringToNumber,
+  flipBoolean,
+  whatAmI,
+  isItTruthy,
+  deepTypeChecker,
+} = require("./index");
 
 describe("stringToNumber", () => {
   it('should convert string "123" to number 123', () => {
@@ -69,5 +75,46 @@ describe("isItTruthy", () => {
 
   it('should return "It\'s truthy!" for a non-empty object', () => {
     expect(isItTruthy({ key: "value" })).toBe("It's truthy!");
+  });
+});
+
+describe("deepTypeChecker", () => {
+  it("should correctly identify types for a flat object", () => {
+    expect(deepTypeChecker({ name: "John", age: 25 })).toBe(
+      "I'm an object with properties:\n- name: I'm a string!\n- age: I'm a number!"
+    );
+  });
+
+  it("should correctly identify types for a nested object", () => {
+    expect(
+      deepTypeChecker({
+        name: "John",
+        address: { city: "New York", zip: 12345 },
+      })
+    ).toBe(
+      "I'm an object with properties:\n- name: I'm a string!\n- address: I'm an object with properties:\n    - city: I'm a string!\n    - zip: I'm a number!"
+    );
+  });
+
+  it("should handle arrays with elements of different types", () => {
+    expect(deepTypeChecker([1, "string", { key: "value" }])).toBe(
+      "I'm an array with elements:\n    - I'm a number!\n    - I'm a string!\n    - I'm an object with properties:\n        - key: I'm a string!"
+    );
+  });
+
+  it("should handle complex nested structures", () => {
+    const input = { arr: [1, { key: [true, "text"] }] };
+    const expected = `
+I'm an object with properties:
+ - arr: I'm an array with elements:
+        
+ - I'm a number!
+    - I'm an object with properties:
+           - key: I'm an array with elements:
+                 - I'm a boolean!
+            - I'm a string!
+`.trim();
+
+    expect(deepTypeChecker(input)).toEqual(expected);
   });
 });
