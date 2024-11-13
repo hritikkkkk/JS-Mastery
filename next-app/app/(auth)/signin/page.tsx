@@ -2,10 +2,10 @@
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, experimental_taintUniqueValue, useState } from "react";
 
 export default function signin() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
@@ -23,7 +23,7 @@ export default function signin() {
             <div className="pt-2">
               <LabelledInput
                 onChange={(e) => {
-                  setUsername(e.target.value);
+                  setEmail(e.target.value);
                 }}
                 label="Username"
                 placeholder="hritik@gmail.com"
@@ -41,7 +41,7 @@ export default function signin() {
                   const response = await axios.post(
                     "http://localhost:3000/api/user",
                     {
-                      username,
+                      email,
                       password,
                     }
                   );

@@ -1,20 +1,15 @@
-import axios from "axios";
+import { PrismaClient } from "@prisma/client";
 
+const client = new PrismaClient();
 
 async function fetchData() {
-    
-  const response = await axios.get(
-    "https://week-13-offline.kirattechnologies.workers.dev/api/v1/user/details"
-  );
-  return response.data;
+  const user = await client.user.findFirst();
+  return {
+    email: user?.email,
+  };
 }
 
 export default async function User() {
   const data = await fetchData();
-  return (
-    <div>
-      {data.name}
-      {data.email}
-    </div>
-  );
+  return <div>{data.email}</div>;
 }
