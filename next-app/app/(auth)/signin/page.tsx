@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import axios from "axios";
+import { signup } from "@/app/actions/user";
 import { useRouter } from "next/navigation";
-import { ChangeEventHandler, experimental_taintUniqueValue, useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 
 export default function signin() {
   const [email, setEmail] = useState("");
@@ -38,13 +38,7 @@ export default function signin() {
               />
               <button
                 onClick={async () => {
-                  const response = await axios.post(
-                    "http://localhost:3000/api/user",
-                    {
-                      email,
-                      password,
-                    }
-                  );
+                  signup(email, password);
                   router.push("/");
                 }}
                 type="button"
